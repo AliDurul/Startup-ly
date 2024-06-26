@@ -10,50 +10,50 @@ dotenv.config();
 
 const { WEBHOOK_VERIFY_TOKEN, GRAPH_API_TOKEN, PORT, MY_TOKEN } = process.env;
 
-app.get("/webhook", (req, res) => {
-    const mode = req.query["hub.mode"];
-    const token = req.query["hub.verify_token"];
-    const challenge = req.query["hub.challenge"];
+// app.get("/webhook", (req, res) => {
+//     const mode = req.query["hub.mode"];
+//     const token = req.query["hub.verify_token"];
+//     const challenge = req.query["hub.challenge"];
 
 
-    // check the mode and token sent are correct
-    if (mode === 'subscribe' && token === MY_TOKEN) {
-        res.status(200).send(challenge);
-    } else {
-        res.sendStatus(403);
-    }
+//     // check the mode and token sent are correct
+//     if (mode === 'subscribe' && token === MY_TOKEN) {
+//         res.status(200).send(challenge);
+//     } else {
+//         res.sendStatus(403);
+//     }
 
-})
+// })
 
 
-app.post("/webhook", async (req, res) => {
-    console.log("Incoming webhook message:", JSON.stringify(req.body, null, 2));
-    const initial = req.body.entry?.[0]?.changes[0]?.value;
+// app.post("/webhook", async (req, res) => {
+//     console.log("Incoming webhook message:", JSON.stringify(req.body, null, 2));
+//     const initial = req.body.entry?.[0]?.changes[0]?.value;
 
-    const message = initial.messages?.[0];
-    const business_phone_number_id = initial?.metadata?.phone_number_id;
-    const from = message.from;
+//     const message = initial.messages?.[0];
+//     const business_phone_number_id = initial?.metadata?.phone_number_id;
+//     const from = message.from;
 
-    if (message?.type === "text") {
+//     if (message?.type === "text") {
 
-        await axios({
-            method: "POST",
-            url: `https://graph.facebook.com/v18.0/${business_phone_number_id}/messages?access_token=${GRAPH_API_TOKEN}`,
-            headers: {
-                "Content-Type":"application/json"
-            },
-            data: {
-                messaging_product: "whatsapp",
-                to: from,
-                text: {
-                    body: 'hi there mr man'
-                },
-            }
-        })
+//         await axios({
+//             method: "POST",
+//             url: `https://graph.facebook.com/v18.0/${business_phone_number_id}/messages?access_token=${GRAPH_API_TOKEN}`,
+//             headers: {
+//                 "Content-Type":"application/json"
+//             },
+//             data: {
+//                 messaging_product: "whatsapp",
+//                 to: from,
+//                 text: {
+//                     body: 'hi there mr man'
+//                 },
+//             }
+//         })
 
-        res.sendStatus(200);
-    }
-});
+//         res.sendStatus(200);
+//     }
+// });
 
 /* ----- */
 app.post("/webhook", async (req, res) => {
