@@ -3,7 +3,7 @@ import StartupCard from '@/components/StartupCard';
 import { findAllStartups } from '@/lib/actions';
 import React from 'react'
 
-export default async function Home({ searchParams }: { searchParams: { query: string } }) {
+export default async function Home({ searchParams }: { searchParams: Promise<{ query?: string }> }) {
     const { query } = await searchParams;
 
     const posts = await findAllStartups(query || '');
