@@ -8,11 +8,6 @@ const Page = async () => {
 
   if (!session) redirect("/");
 
-  // const user = await prisma.user.findUnique({
-  //   where: { id: session.userId as string },
-  // })
-
-  // console.log(user);
   return (
     <>
       <section className="pink_container min-h-[230px]!">

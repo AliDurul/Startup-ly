@@ -1,29 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Author` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Playlist` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Startup` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "public"."Startup" DROP CONSTRAINT "Startup_authorId_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."Startup" DROP CONSTRAINT "Startup_playlistId_fkey";
-
--- DropTable
-DROP TABLE "public"."Author";
-
--- DropTable
-DROP TABLE "public"."Playlist";
-
--- DropTable
-DROP TABLE "public"."Startup";
-
--- DropEnum
-DROP TYPE "public"."Category";
-
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" TEXT NOT NULL,
@@ -70,6 +44,35 @@ CREATE TABLE "verification_tokens" (
     "expires" TIMESTAMP(3) NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "Startup" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "pitch" TEXT NOT NULL,
+    "views" INTEGER NOT NULL DEFAULT 0,
+    "authorId" TEXT NOT NULL,
+    "playlistId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Startup_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Playlist" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Playlist_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
 
@@ -82,8 +85,20 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
 
+-- CreateIndex
+CREATE INDEX "Startup_id_title_slug_idx" ON "Startup"("id", "title", "slug");
+
+-- CreateIndex
+CREATE INDEX "Playlist_id_slug_idx" ON "Playlist"("id", "slug");
+
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Startup" ADD CONSTRAINT "Startup_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Startup" ADD CONSTRAINT "Startup_playlistId_fkey" FOREIGN KEY ("playlistId") REFERENCES "Playlist"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -35,11 +35,11 @@ const Navbar = async () => {
                 </button>
               </form>
 
-              <Link href={`/user/${session?.id}`}>
+              <Link href={`/user/${session?.user.id}`}>
                 <Avatar className="size-10">
                   <AvatarImage
-                    src={session?.user?.image || ""}
-                    alt={session?.user?.name || ""}
+                    src={session?.user?.image ? String(session?.user?.image) : ""}
+                    alt={session?.user?.name ? String(session?.user?.name) : ""}
                   />
                   <AvatarFallback>AV</AvatarFallback>
                 </Avatar>

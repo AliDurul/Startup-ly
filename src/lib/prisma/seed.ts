@@ -48,7 +48,7 @@ async function main() {
         slug: "medicore-health",
         description: "AI-driven health diagnostics and wellness monitoring platform.",
         category: "Health",
-        image: "https://placehold.co/600x400?text=MediCore+Health",
+        image: "https://placehold.co/600x400?text=MediCwore+Health",
         pitch: "Empowering preventive healthcare with real-time analytics.",
         authorId: author.id,
         playlistId: null,

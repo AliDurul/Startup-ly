@@ -1,15 +1,13 @@
+import SearchForm from '@/components/SearchForm';
 import StartupCard from '@/components/StartupCard';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { findAllStartups } from '@/lib/actions';
 import React from 'react'
 
 export default async function Home({ searchParams }: { searchParams: { query: string } }) {
     const { query } = await searchParams;
 
-    const posts: any[] = []; //await getStartups(query);
+    const posts = await findAllStartups(query || '');
 
-    const session = await auth();
-    // console.log('session', session);
     return (
         <>
             <section className="pink_container">
@@ -23,7 +21,7 @@ export default async function Home({ searchParams }: { searchParams: { query: st
                     Competitions.
                 </p>
 
-                {/* <SearchForm query={query} /> */}
+                <SearchForm query={query} />
             </section>
 
             <section className="section_container">
@@ -34,7 +32,7 @@ export default async function Home({ searchParams }: { searchParams: { query: st
                 <ul className="mt-7 card_grid">
                     {posts?.length > 0 ? (
                         posts.map((post: any) => (
-                            <StartupCard key={post?._id} post={post} />
+                            <StartupCard key={post?.id} post={post} />
                         ))
                     ) : (
                         <p className="no-results">No startups found</p>
